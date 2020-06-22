@@ -1,0 +1,83 @@
+import Carpas.*
+import Jarras.*
+import Personas.*
+import Nacionalidades.*
+import MarcasDeCerveza.*
+
+
+test "Requerimientos segunda parte" {
+
+	const carpaCervezera = new CarpaCervezera(limiteDeGenteAdmitida = 10,
+												poseeBandaDeMusicaTradicional = true)
+										
+	carpaCervezera.jarrasALaVenta([new JarraDeCerveza(capacidad = 1,marcaDeLaCerveza = new CervezaNegra(contenidoDeLupulo = 8, paisDeOrigen = belgica)),
+									new JarraDeCerveza(capacidad = 0.5,marcaDeLaCerveza = new CervezaNegra(contenidoDeLupulo = 10,paisDeOrigen = belgica))])
+	
+	//5													
+	/* UNA PERSONA QUIERE ENTRAR */
+	/* VA A QUERER ENTRAR, POR QUE HAY MUSICA TRADICIONAL, LAS CERVEZAS TIENEN EL CONTENIDO DE LUPULO MAYOR A 4
+	 * POR ENDE LE GUSTA.
+	 */
+	
+	const unaPersona = new Persona(peso = 65,escuchaMusicaTradicional= true, nivelDeAguante = 2.5,nacionalidad = belgica)	
+	assert.that(carpaCervezera.quiereEntrar(unaPersona))
+	
+	
+	//6 
+	/* NO ESTA EBRIO POR QUE NO COMPRO NINGUNA JARRA, Y LA CAPACIDAD NO SUPERA SI ES QUE INGRESA
+	 * POR LO TANTO SI DEJA INGRESAR
+	 */
+	assert.that(carpaCervezera.dejaIngresar(unaPersona))
+	
+	//7 
+	/* CUMPLIDA LAS DOS CONDICIONES DE ARRIBA, SI PUEDE ENTRAR
+	 * YA QUE QUIERE INGRESAR Y ADEMAS DEJA INGRESAR.
+	 */
+	assert.that(carpaCervezera.puedeEntrar(unaPersona))
+	
+	
+	//8
+	/* DEJA INGRESAR A LA PERSONA Y AHORA HAY 1 DENTRO */
+	carpaCervezera.dejarEntrar(unaPersona)
+	assert.equals(1,carpaCervezera.cantidadDePersonasDentro())
+	
+	//9
+	/*  ESTE NO LO SUPE RESOLVER, LO INTENTE HACER PERO NO SALIA BIEN LOS TEST.
+	 */
+	
+	
+	//10
+	
+	 unaPersona.comprarMuchasJarras([new JarraDeCerveza(capacidad = 1,marcaDeLaCerveza = new CervezaNegra(contenidoDeLupulo = 8, paisDeOrigen = belgica)),
+	 				new JarraDeCerveza(capacidad = 1.5,marcaDeLaCerveza = new CervezaNegra(contenidoDeLupulo = 10,paisDeOrigen = belgica))	
+	 ])
+	 
+	 const otraPersona = new Persona(peso = 70,escuchaMusicaTradicional= true, nivelDeAguante = 2.3,nacionalidad = alemania)	
+	  carpaCervezera.dejarEntrar(otraPersona)
+	 // Confirmo que hay 2 personas dentro, puede entrar por que cumple todas las condiciones.
+	 assert.equals(2,carpaCervezera.cantidadDePersonasDentro())
+	 
+	 otraPersona.comprarMuchasJarras([new JarraDeCerveza(capacidad = 1.5,marcaDeLaCerveza = new CervezaNegra(contenidoDeLupulo = 4, paisDeOrigen = belgica))])
+	
+	
+	//LAS DOS PERSONAS SON EBRIOS EMPEDERNIDOS.
+	assert.equals(2,carpaCervezera.cuantosEbriosEmperdenidosHay())
+	
+	otraPersona.jarrasQueCompro([new JarraDeCerveza(capacidad = 0.5,marcaDeLaCerveza = new CervezaNegra(contenidoDeLupulo = 4, paisDeOrigen = belgica))])
+	
+	//AHORA COMO "OTRA PERSONA POSEE 1 JARRA DE MEDIO LITRO, SOLO HABRIA 1 EBRIO EMPEDERNIDO
+	
+	 assert.equals(1,carpaCervezera.cuantosEbriosEmperdenidosHay())
+	 
+	 //11
+	 
+	 //UNA PERSONA ES PATRIOTA, POR QUE CUMPLE LA CONDICION DE QUE TODAS LAS CERVEZAS SON DE SU MISMO PAIS
+	 
+	 assert.that(unaPersona.esPatriota())
+	 
+	 //POR OTRO LADO LA OTRA PERSONA NO ES PATRIOTA, YA QUE ES DE ALEMANIA
+	
+	assert.notThat(otraPersona.esPatriota())	 
+}
+
+

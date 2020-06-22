@@ -1,0 +1,52 @@
+import MarcasDeCerveza.*
+import Jarras.*
+import Personas.*
+import Nacionalidades.*
+
+
+
+test "Requerimientos - primera parte" {
+
+	//1
+	/* Para que la graduacion de la cerveza hofbrau de 8, la graduacion reglamentaria debe ser 6.4 
+	 * por que a eso se le multiplica 1.25 por ser una cerveza roja.
+	 */
+	
+	const hofbrau = new CervezaRoja(contenidoDeLupulo = 8,paisDeOrigen = alemania) 
+	gradCervezasNegras.graduacionReglamentaria(6.4)
+	assert.equals(0.04, new JarraDeCerveza(capacidad = 0.5,marcaDeLaCerveza = hofbrau).contenidoDeAlcohol())
+	
+	//2
+	// CADA JARRA TIENE SU CONTENIDO DE ALCOHOL COMO SE MUESTRA AL COSTADO DE CADA INSTANCIA.
+	
+	const unaPersona = new Persona(peso = 60, escuchaMusicaTradicional = true, nivelDeAguante = 3.20, nacionalidad = alemania)
+	gradCervezasNegras.graduacionReglamentaria(2)
+	unaPersona.comprarMuchasJarras([ new JarraDeCerveza(capacidad = 1,marcaDeLaCerveza = new CervezaNegra(contenidoDeLupulo = 8, paisDeOrigen = alemania)), // <-- El contenido de alcohol es -> 0.02
+								     new JarraDeCerveza(capacidad = 0.5,marcaDeLaCerveza = new CervezaRoja(contenidoDeLupulo = 10,paisDeOrigen = alemania)),// <-- El contenido de alcohol es ->0.0125
+								     new JarraDeCerveza(capacidad = 1, marcaDeLaCerveza = new CervezaNegra(contenidoDeLupulo = 5, paisDeOrigen = belgica))//<-- El contenido de alcohol es -> 0.2725
+	])
+	assert.equals(0.0525,unaPersona.cantidadTotalDeALcohol())
+	
+	
+	//3
+		/* NO ESTA EBRIA CON LAS CARACTERISTICAS DE ARRIBA */
+	assert.notThat(unaPersona.estaEbria())
+	
+		/* PERO SI BAJAMOS SU NIVEL DE AGUANTE UN POCO SI ESTARA EBRIA */	
+	unaPersona.nivelDeAguante(1.5)
+	assert.that(unaPersona.estaEbria())
+	
+	
+	//4
+	/* LE VA A GUSTAR POR QUE LA PERSONA ES DE ALEMANIA */
+	assert.that(unaPersona.leGustaLaCerveza(new CervezaNegra(contenidoDeLupulo = 8, paisDeOrigen = alemania)))
+	
+	/* LE VA A GUSTAR POR SU CONTENIDO DE LUPULO ES MAYOR A 4 */
+	unaPersona.nacionalidad(belgica)
+	assert.that(unaPersona.leGustaLaCerveza(new CervezaNegra(contenidoDeLupulo = 8, paisDeOrigen = alemania)))
+	
+	/* SI BAJAMOS EL CONTENIDO DE LUPULO A 3, YA NO LE VA A GUSTAR */
+	assert.notThat(unaPersona.leGustaLaCerveza(new CervezaNegra(contenidoDeLupulo = 3, paisDeOrigen = alemania)))
+	
+	
+}
